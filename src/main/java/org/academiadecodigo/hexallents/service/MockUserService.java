@@ -20,7 +20,8 @@ public class MockUserService implements UserService {
     }
 
     public void addUser(User user) {
-        usersMap.put(user.getUsername(), user);
+
+        usersMap.putIfAbsent(user.getUsername(), user);
     }
 
     public void removeUser(User user) {
@@ -33,14 +34,9 @@ public class MockUserService implements UserService {
 
     public boolean authenticateUser(String username, String password) {
 
-        if (usersMap.containsKey(username)) {
-            User authenticatedUser = usersMap.get(username);
-            if (authenticatedUser.getPassword().equals(password)) {
-                return true;
-            }
-            return false;
-        }
-        return false;
+        User authenticatedUser = usersMap.get(username);
+
+        return authenticatedUser != null && authenticatedUser.getPassword().equals(password);
     }
 
     public int count() {
